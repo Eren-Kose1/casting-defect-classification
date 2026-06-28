@@ -48,7 +48,12 @@ def grad_cam(model, arr, conv_name):
     x = tf.convert_to_tensor(arr[None], dtype=tf.float32)
     with tf.GradientTape() as tape:
         conv_out, preds = grad_model(x)
-        loss = preds[:, 0]
+        # Use the logit (pre-sigmoid score), not the probability. The gradient of
+        # the probability vanishes when the sigmoid saturates, so a very confident
+        # "defective" at p=1.000 would give a flat heatmap. The logit does not
+        # saturate, so we reconstruct it from the probability: logit = log(p/(1-p)).
+        p = tf.clip_by_value(preds[:, 0], 1e-6, 1.0 - 1e-6)
+        loss = tf.math.log(p) - tf.math.log(1.0 - p)
     grads = tape.gradient(loss, conv_out)[0]
     weights = tf.reduce_mean(grads, axis=(0, 1))
     cam = tf.nn.relu(tf.reduce_sum(conv_out[0] * weights, axis=-1))

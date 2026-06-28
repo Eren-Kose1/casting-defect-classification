@@ -43,17 +43,27 @@ def preprocess(pil_img):
 def grad_cam(model, arr, conv_name):
     # Standard Grad-CAM: weight the last conv feature maps by the gradient of the
     # defective score, then keep the positive part and normalise to 0-1.
-    grad_model = keras.models.Model(model.inputs,
-                                    [model.get_layer(conv_name).output, model.output])
+    #
+    # IMPORTANT: we must differentiate the *logit* (the raw pre-sigmoid score),
+    # not the probability that the model outputs. For a very confident defect the
+    # sigmoid saturates to exactly 1.0 in float32, and the gradient of a saturated
+    # sigmoid is ~0 -> a flat, useless heatmap. We also cannot rebuild the logit
+    # from the probability with log(p/(1-p)): once p has rounded to 1.0 the
+    # original score is already lost. So we read the logit straight from the final
+    # Dense layer's weights, applied to the features feeding into it. The logit
+    # keeps growing with confidence, so its gradient never vanishes.
+    dense = model.layers[-1]  # the Dense(1, activation="sigmoid") output layer
+    grad_model = keras.models.Model(
+        model.inputs,
+        [model.get_layer(conv_name).output, dense.input]  # conv maps + pre-sigmoid features
+    )
     x = tf.convert_to_tensor(arr[None], dtype=tf.float32)
     with tf.GradientTape() as tape:
-        conv_out, preds = grad_model(x)
-        # Use the logit (pre-sigmoid score), not the probability. The gradient of
-        # the probability vanishes when the sigmoid saturates, so a very confident
-        # "defective" at p=1.000 would give a flat heatmap. The logit does not
-        # saturate, so we reconstruct it from the probability: logit = log(p/(1-p)).
-        p = tf.clip_by_value(preds[:, 0], 1e-6, 1.0 - 1e-6)
-        loss = tf.math.log(p) - tf.math.log(1.0 - p)
+        conv_out, features = grad_model(x)
+        tape.watch(conv_out)
+        # Re-apply the Dense layer linearly (no sigmoid): logit = features @ W + b.
+        logit = tf.matmul(features, dense.kernel) + dense.bias
+        loss = logit[:, 0]
     grads = tape.gradient(loss, conv_out)[0]
     weights = tf.reduce_mean(grads, axis=(0, 1))
     cam = tf.nn.relu(tf.reduce_sum(conv_out[0] * weights, axis=-1))

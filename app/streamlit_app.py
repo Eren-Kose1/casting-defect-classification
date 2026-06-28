@@ -87,15 +87,6 @@ with st.sidebar:
         "- Size and speed: **0.26 M params, ~2.6 ms/image**"
     )
 
-    with st.expander("Model comparison (test set, 715 images)"):
-        st.markdown(
-            "| Model | Acc | Def. recall | Params |\n"
-            "|---|---|---|---|\n"
-            "| **Custom CNN** | **99.30%** | **99.78%** | **0.26 M** |\n"
-            "| EfficientNetV2-B0 | 99.02% | 98.68% | 5.92 M |\n"
-            "| ConvNeXt-Tiny | 98.46% | 99.34% | 27.8 M |"
-        )
-
     st.caption("Eren Köse · University of Europe for Applied Sciences")
 
 
@@ -115,6 +106,15 @@ with st.expander("How to use"):
         "3. Check the Grad-CAM heatmap: warm colours mark the regions the model "
         "relied on. For a good prediction these should sit on the casting body, "
         "not the background."
+    )
+
+with st.expander("Model comparison (test set, 715 images)"):
+    st.markdown(
+        "| Model | Accuracy | Defective recall | Params |\n"
+        "|---|---|---|---|\n"
+        "| **Custom CNN** | **99.30%** | **99.78%** | **0.26 M** |\n"
+        "| EfficientNetV2-B0 | 99.02% | 98.68% | 5.92 M |\n"
+        "| ConvNeXt-Tiny | 98.46% | 99.34% | 27.8 M |"
     )
 
 model = load_model()

@@ -1,0 +1,14 @@
+{
+  "id": "erenkose1/casting-defect-classification",
+  "title": "Casting Defect Classification",
+  "code_file": "Casting_Defect_Classification.ipynb",
+  "language": "python",
+  "kernel_type": "notebook",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "dataset_sources": ["ravirajsinh45/real-life-industrial-dataset-of-casting-product"],
+  "competition_sources": [],
+  "kernel_sources": [],
+  "model_sources": []
+}

@@ -1,0 +1,4 @@
+,accuracy,precision,recall_def,f1,roc_auc,false_neg_rate,false_negatives,params_M,infer_ms_per_img,train_time_s
+custom_cnn,0.99301,0.99123,0.99779,0.9945,0.99989,0.00221,1.0,0.25888,2.6093,608.35594
+efficientnet_v2b0,0.99021,0.99777,0.98675,0.99223,0.99921,0.01325,6.0,5.92059,17.53065,661.40181
+convnext_tiny,0.98462,0.98253,0.99338,0.98793,0.99965,0.00662,3.0,27.8209,13.67613,710.99901

@@ -1,0 +1,24 @@
+# Large run artifacts (too big / not needed in git)
+kaggle_output/
+*.zip
+*.log
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Secrets and credentials (NEVER commit these)
+**/access_token
+**/kaggle.json
+.env
+
+# OS junk
+Thumbs.db
+.DS_Store
+
+# Local drafts and tooling (not part of the deliverable)
+.claude/
+/*.py
+report/
+overleaf/

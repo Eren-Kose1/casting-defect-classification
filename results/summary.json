@@ -1,0 +1,35 @@
+{
+  "custom_cnn": {
+    "accuracy": 0.993006993006993,
+    "precision": 0.9912280701754386,
+    "recall_def": 0.9977924944812362,
+    "f1": 0.9944994499449945,
+    "roc_auc": 0.9998904672834201,
+    "false_neg_rate": 0.002207505518763797,
+    "false_negatives": 1.0,
+    "params_M": 0.258881,
+    "infer_ms_per_img": 2.6093029475712277
+  },
+  "efficientnet_v2b0": {
+    "accuracy": 0.9902097902097902,
+    "precision": 0.9977678571428571,
+    "recall_def": 0.9867549668874173,
+    "f1": 0.9922308546059934,
+    "roc_auc": 0.9992079942031916,
+    "false_neg_rate": 0.013245033112582781,
+    "false_negatives": 6.0,
+    "params_M": 5.920593,
+    "infer_ms_per_img": 17.530645357145296
+  },
+  "convnext_tiny": {
+    "accuracy": 0.9846153846153847,
+    "precision": 0.982532751091703,
+    "recall_def": 0.9933774834437086,
+    "f1": 0.9879253567508233,
+    "roc_auc": 0.9996461250695111,
+    "false_neg_rate": 0.006622516556291391,
+    "false_negatives": 3.0,
+    "params_M": 27.820897,
+    "infer_ms_per_img": 13.676128187379637
+  }
+}
